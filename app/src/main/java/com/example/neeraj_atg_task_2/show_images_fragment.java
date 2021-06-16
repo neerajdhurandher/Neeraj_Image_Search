@@ -65,10 +65,9 @@ public class show_images_fragment extends Fragment {
 
         pd = new ProgressDialog(getContext());
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setIndeterminate(true);
-        pd.setProgress(50);
         pd.setMessage("Please Wait");
         pd.show();
+
 
         mainActivity_vm mainActivityVm = new ViewModelProvider(show_images_fragment.this).get(mainActivity_vm.class);
 
@@ -113,7 +112,7 @@ public class show_images_fragment extends Fragment {
         Observer<Example_model> observer = new Observer<Example_model>() {
             @Override
             public void onChanged(Example_model example_model) {
-
+                pd.show();
 
                     Log.d("get_data","observer call");
 
@@ -125,14 +124,15 @@ public class show_images_fragment extends Fragment {
 
                     adaptershowphotos = new adaptershowphotos(getActivity(),list);
                     recyclerView.setAdapter(adaptershowphotos);
+                    pd.dismiss();
 
             }
         };
 
+
         mainActivityVm.forMutableLiveData.observe(getViewLifecycleOwner(),observer);
 
         recyclerView.setAdapter(adaptershowphotos);
-        pd.dismiss();
 
 
 

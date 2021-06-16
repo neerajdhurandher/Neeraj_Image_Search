@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
@@ -46,7 +47,7 @@ public class search_fragment extends Fragment {
 
     EditText search_text;
     Button search_btn;
-    String txtSearchString;
+    String txtSearchString = "neeraj_search_null";
     ProgressDialog pd;
     search_query search_query;
 
@@ -83,16 +84,11 @@ public class search_fragment extends Fragment {
 
         pd = new ProgressDialog(getContext());
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setIndeterminate(true);
-        pd.setProgress(50);
         pd.setMessage("Please Wait");
 
         timeSinceLastRequest = System.currentTimeMillis();
 
         txtSearchString = search_text.getText().toString();
-
-        if(txtSearchString.equals("") )
-            txtSearchString = "neeraj_search_null";
 
 
         Log.d("get_data",   "Search fragment start");
@@ -137,13 +133,9 @@ public class search_fragment extends Fragment {
 
 
 
-
-
-
-
         search_btn.setOnClickListener(v -> {
 
-            if (!txtSearchString.equals("neeraj_search_null") ) {
+            if (!txtSearchString.equals("neeraj_search_null") && !txtSearchString.equals("")) {
 
                 Log.d("get_data", txtSearchString + "  clicked");
 
@@ -156,7 +148,9 @@ public class search_fragment extends Fragment {
                 SharedPreferences.Editor editor_sp = sharedPref_search_query.edit();
                 editor_sp.putString("search_query_sp",txtSearchString);
                 editor_sp.apply();
-
+                search_text.setText("");
+                search_text.setHint("Enter Here");
+                search_text.clearFocus();
                 pd.dismiss();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frg_container, new show_images_fragment(), "replace_frg").addToBackStack(null).commit();
 
@@ -165,6 +159,9 @@ public class search_fragment extends Fragment {
             } else {
 
                 Toast.makeText(getActivity(), "Enter some key words", Toast.LENGTH_SHORT).show();
+                search_text.setText("");
+                search_text.setHint("Enter Here");
+                search_text.clearFocus();
             }
 
         });
